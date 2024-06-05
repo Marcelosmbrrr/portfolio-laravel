@@ -1,0 +1,20 @@
+import { Link } from '@inertiajs/react';
+import { PropsWithChildren } from 'react';
+
+export default function Guest({ children }: PropsWithChildren) {
+
+    return (
+        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+            <div>
+                <Link href="/">
+                    <img className="w-20 h-20 fill-current text-gray-500" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg" />
+                </Link>
+            </div>
+
+            <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+                {children}
+            </div>
+        </div>
+    );
+    
+}
