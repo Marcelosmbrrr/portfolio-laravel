@@ -31,13 +31,13 @@ export default function Login({ status, canResetPassword }: { status?: string, c
 
             <form onSubmit={submit}>
                 <div>
-                    <label className="block font-medium text-sm text-gray-700">Username</label>
+                    <label className="block font-medium text-sm text-gray-700">Nome de Usuário</label>
                     <input type="text" className="w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm" onChange={(e) => setData('username', e.target.value)} />
                     <p className='text-sm text-red-600 mt-2'>{errors.username}</p>
                 </div>
 
                 <div className="mt-4">
-                    <label className="block font-medium text-sm text-gray-700">Password</label>
+                    <label className="block font-medium text-sm text-gray-700">Senha</label>
                     <input type="password" className="w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm" onChange={(e) => setData('password', e.target.value)} />
                     <p className='text-sm text-red-600 mt-2'>{errors.password}</p>
                 </div>
@@ -45,7 +45,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                 <div className="block mt-4">
                     <label className="flex items-center">
                         <input checked={data.remember} type='checkbox' className='rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500' onChange={(e) => setData('remember', e.target.checked)} />
-                        <span className="ms-2 text-sm text-gray-600">Remember me</span>
+                        <span className="ms-2 text-sm text-gray-600">Lembrar</span>
                     </label>
                 </div>
 
@@ -55,12 +55,12 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                             href={route('password.request')}
                             className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md"
                         >
-                            Forgot your password?
+                            Esqueceu a senha?
                         </Link>
                     )}
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                    {processing ? "Loading..." : "Log in"}
+                    {processing ? "Carregando..." : "Acessar"}
                     </PrimaryButton>
                 </div>
             </form>

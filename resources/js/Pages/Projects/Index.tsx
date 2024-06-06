@@ -1,10 +1,45 @@
+import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router, Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { Paginator } from '@/Components/Table/Paginator';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
+import { PencilSquareIcon } from '@heroicons/react/24/solid'
 
-export default function Projects({ auth }: PageProps) {
+interface Project {
+    id: number;
+    public_id: string;
+    name: string;
+    phase: string;
+    description: string;
+    technologies: string;
+    created_at: string | null;
+    updated_at: string | null;
+}
+
+type Pagination = { data: Project[], per_page: number, current_page: number, last_page: number, total: number }
+type QueryParams = { page: number, search: string, limit: string }
+
+const defaultParams: QueryParams = { page: 1, search: "", limit: "10" }
+
+export default function Projects({ auth, projects, queryParams = null, success }: PageProps) {
+
+    const { data, per_page, current_page, last_page, total } = projects as Pagination;
+
+    const currentParams: QueryParams = Object.assign({}, defaultParams, queryParams);
+    const [search, setSearch] = React.useState<string>("");
+
+    function changePage(page: number) {
+        currentParams["page"] = page;
+        router.get("projects", currentParams);
+    }
+
+    function submitSearch(e: any) {
+        if (e.key === 'Enter') {
+            currentParams["search"] = search;
+            router.get("projects", currentParams);
+        }
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -30,12 +65,13 @@ export default function Projects({ auth }: PageProps) {
                                                     id="hs-table-with-pagination-search"
                                                     className="py-2 ps-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-red-500 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none"
                                                     placeholder="Search for items"
+                                                    onKeyDown={submitSearch} onChange={(e) => setSearch(e.target.value)}
                                                 />
                                             </div>
                                             <div>
-                                                <button type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                                <Link href={route('projects.create')} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
                                                     Create Project
-                                                </button>
+                                                </Link>
                                             </div>
                                         </div>
 
@@ -51,32 +87,31 @@ export default function Projects({ auth }: PageProps) {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-200">
-                                                    {[
-                                                        { id: 1, name: 'John Brown', age: 45, address: 'New York No. 1 Lake Park' },
-                                                        { id: 2, name: 'Jim Green', age: 27, address: 'London No. 1 Lake Park' },
-                                                        { id: 3, name: 'Joe Black', age: 31, address: 'Sidney No. 1 Lake Park' },
-                                                        { id: 4, name: 'Edward King', age: 16, address: 'LA No. 1 Lake Park' },
-                                                        { id: 5, name: 'Jim Red', age: 45, address: 'Melbourne No. 1 Lake Park' },
-                                                    ].map((person) => (
-                                                        <tr key={person.id}>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{person.name}</td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{person.age}</td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{person.address}</td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{person.address}</td>
-                                                            <td className="px-6 py-4 space-x-2 whitespace-nowrap text-end text-sm font-medium">
-                                                                <button>
+
+                                                    {data.map((project) => (
+                                                        <tr key={project.id}>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{project.phase}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.name}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.technologies}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.description}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                                                <Link href={route('projects.edit', { id: project.public_id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
-                                                                </button>
-                                                                <button>
-                                                                    <TrashIcon className="flex-shrink-0 w-5 h-5 text-red-600 transition duration-75" />
-                                                                </button>
+                                                                </Link>
                                                             </td>
                                                         </tr>
                                                     ))}
+
+                                                    {data.length === 0 &&
+                                                        <tr>
+                                                            <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">No project found</td>
+                                                        </tr>
+                                                    }
+
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <Paginator />
+                                        <Paginator last_page={last_page} current_page={current_page} changePage={changePage} />
                                     </div>
                                 </div>
                             </div>

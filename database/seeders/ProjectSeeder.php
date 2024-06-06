@@ -15,7 +15,7 @@ class ProjectSeeder extends Seeder
     {
         $data = [
             [
-                "uuid" => "1995f057-a876-4215-b947-40dbbc83fe79",
+                "public_id" => "1995f057-a876-4215-b947-40dbbc83fe79",
                 "status" => "finalizado",
                 "name" => "Portfolio v1",
                 "description" => "Primeira versão do portfolio, feita com NextJS e hospedada na Vercel.",
@@ -23,7 +23,7 @@ class ProjectSeeder extends Seeder
                 "image" => "projects/1995f057-a876-4215-b947-40dbbc83fe79.png",
             ],
             [
-                "uuid" => "c36d5994-5fb2-4d32-8a75-2cfc769f9eaf",
+                "public_id" => "c36d5994-5fb2-4d32-8a75-2cfc769f9eaf",
                 "status" => "produção",
                 "name" => "Portfolio v2",
                 "description" => "Segunda versão do portfolio, que é a atual, feita com Laravel, VueJS e hospedada na Heroku.",

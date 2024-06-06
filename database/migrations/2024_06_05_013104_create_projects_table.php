@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
-            $table->enum('status', ['ideia', 'planejamento', 'desenvolvimento', 'produção', 'finalizado']);
+            $table->uuid('public_id');
+            $table->enum('phase', ['ideia', 'planejamento', 'desenvolvimento', 'produção', 'finalizado']);
             $table->string('name');
             $table->string('description');
             $table->json('technologies');

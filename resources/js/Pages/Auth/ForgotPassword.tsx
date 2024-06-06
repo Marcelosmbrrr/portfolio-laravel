@@ -22,7 +22,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <Head title="Forgot Password" />
 
             <div className="mb-4 text-sm text-gray-600">
-                Forgot your password? Inform your email address for receive the password reset link.
+                Esqueceu a senha? Informe o seu e-mail para receber o link para criar uma nova.
             </div>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
@@ -34,7 +34,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </div>
                 <div className="flex items-center justify-end mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        {processing ? "Loading..." : "Send Password Reset Link"} 
+                        {processing ? "Carregando..." : "Enviar Link"} 
                     </PrimaryButton>
                 </div>
             </form>

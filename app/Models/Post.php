@@ -27,4 +27,16 @@ class Post extends Model
             'updated_at' => 'datetime:d/m/Y H:i:s'
         ];
     }
+
+    function scopeSearch($query, $value)
+    {
+        return $query->when((bool) $value, function ($query) use ($value) {
+            $query
+                ->where('public_id', $value)
+                ->orWhere('name', 'LIKE', '%' . $value . '%')
+                ->orWhere('category', 'LIKE', '%' . $value . '%')
+                ->orWhere('tags', 'LIKE', '%' . $value . '%')
+                ->orWhere('description', 'LIKE', '%' . $value . '%');
+        });
+    }
 }

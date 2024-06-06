@@ -2,7 +2,12 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
 
-export default function Dashboard({ auth }: PageProps) {
+type Data = { projects: number, posts: number, technologies: number };
+
+export default function Dashboard({ auth, data }: PageProps) {
+
+    const { projects, posts, technologies } = data as Data;
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -19,12 +24,12 @@ export default function Dashboard({ auth }: PageProps) {
                                 Technologies
                             </h3>
                             <p className="mt-1 text-xs font-medium uppercase text-gray-500 dark:text-neutral-500">
-                                Created: 10
+                                Created: {technologies}
                             </p>
                             <p className="mt-2 text-gray-500 dark:text-neutral-400">
                                 Technologies are sets of knowledge about groupable technologies.
                             </p>
-                            <Link href={route('technologies')} className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">
+                            <Link href={route('technologies.index')} className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">
                                 Go to
                                 <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="m9 18 6-6-6-6"></path>
@@ -37,12 +42,12 @@ export default function Dashboard({ auth }: PageProps) {
                                 Projects
                             </h3>
                             <p className="mt-1 text-xs font-medium uppercase text-gray-500 dark:text-neutral-500">
-                                Created: 10
+                                Created: {projects}
                             </p>
                             <p className="mt-2 text-gray-500 dark:text-neutral-400">
                                 Projects are systems developed or under development.
                             </p>
-                            <Link href={route('projects')} className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">
+                            <Link href={route('projects.index')} className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">
                                 Go to
                                 <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="m9 18 6-6-6-6"></path>
@@ -55,12 +60,12 @@ export default function Dashboard({ auth }: PageProps) {
                                 Posts
                             </h3>
                             <p className="mt-1 text-xs font-medium uppercase text-gray-500 dark:text-neutral-500">
-                                Created: 10
+                                Created: {posts}
                             </p>
                             <p className="mt-2 text-gray-500 dark:text-neutral-400">
                                 Posts are publications on various subjects, not limited to programming
                             </p>
-                            <Link href={route('posts')} className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">
+                            <Link href={route('posts.index')} className="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400">
                                 Go to
                                 <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="m9 18 6-6-6-6"></path>

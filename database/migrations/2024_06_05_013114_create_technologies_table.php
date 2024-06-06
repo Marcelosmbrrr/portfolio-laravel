@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('technologies', function (Blueprint $table) {
             $table->id();
+            $table->uuid('public_id');
             $table->string('name');
             $table->string('description');
             $table->json('icons');
