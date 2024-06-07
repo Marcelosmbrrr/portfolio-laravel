@@ -17,6 +17,12 @@ export default function CreatePost({ auth }: PageProps) {
 
     const submit: React.FormEventHandler = (e) => {
         e.preventDefault();
+
+        post("/posts", {
+            onError: (e) => {
+                console.log(e)
+            }
+        });
     }
 
     return (
@@ -91,7 +97,7 @@ export default function CreatePost({ auth }: PageProps) {
                                 <Link href={route('posts.index')} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
                                     Cancel
                                 </Link>
-                                <button disabled={processing} type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
+                                <button disabled={processing} type="submit" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
                                     {processing ? "Loading..." : "Confirm"}
                                 </button>
                             </div>

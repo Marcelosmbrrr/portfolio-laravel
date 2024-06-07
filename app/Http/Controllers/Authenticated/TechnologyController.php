@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Authenticated;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use App\Models\Technology;
 use App\Http\Requests\Technology\CreateTechRequest;
 use App\Http\Requests\Technology\EditTechRequest;
+use App\Http\Resources\TechResource;
 
 class TechnologyController extends Controller
 {
@@ -30,7 +31,7 @@ class TechnologyController extends Controller
             ->paginate((int) $limit, $columns = ['*'], $pageName = 'technologies', (int) $page);
 
         return Inertia::render("Technologies/Index", [
-            "technologies" => $data,
+            "techs" => new TechResource($data),
             "queryParams" => request()->query() ?: null,
             "success" => session('success')
         ]);
@@ -49,9 +50,13 @@ class TechnologyController extends Controller
      */
     public function store(CreateTechRequest $request)
     {
-        $technology = $this->model->create($request->validated());
+        $technology = $this->model->create([
+            ...$request->validated(), 
+            "public_id" => Str::uuid(),
+            "icons" => json_encode($request->icons)
+        ]);
 
-        return redirect()->route('technologies.index', ['search' => $technology->public_id->toString()])
+        return redirect()->route('technologies.index', ['search' => $technology->public_id])
             ->with('success', 'Technology created!');
     }
 
@@ -71,7 +76,12 @@ class TechnologyController extends Controller
         $technology = $this->model->where("public_id", $id)->first();
 
         return Inertia::render("Technologies/EditTech", [
-            "technology" => $technology
+            "technology" => [
+                "id" => $technology->public_id, 
+                "name" => $technology->name,
+                "description" => $technology->description,
+                "icons" => json_decode($technology->icons)
+            ]
         ]);
     }
 
@@ -83,7 +93,7 @@ class TechnologyController extends Controller
         $technology = $this->model->where("public_id", $id)->first();
         $technology->update($request->validated());
 
-        return redirect()->route('technologies.index', ['search' => $technology->public_id->toString()])
+        return redirect()->route('technologies.index', ['search' => $technology->public_id])
             ->with('success', 'Technology updated!');
     }
 

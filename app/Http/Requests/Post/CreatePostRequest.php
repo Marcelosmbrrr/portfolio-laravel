@@ -14,6 +14,13 @@ class CreatePostRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'tags' => explode(',', $this->tags),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,7 +35,7 @@ class CreatePostRequest extends FormRequest
             "tags" => ["required", 'array', 'min:1'],
             "category" => ["required"],
             "content" => ["required", "json"],
-            "image" => ["required"]
+            "image" => ["required", "image", "dimensions:min_height=300, max_height=600, max_width=600"]
         ];
     }
 }

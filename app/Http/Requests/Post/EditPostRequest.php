@@ -15,6 +15,13 @@ class EditPostRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'tags' => explode(',', $this->tags),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -34,7 +41,7 @@ class EditPostRequest extends FormRequest
             "tags" => ["required", 'array', 'min:1'],
             "category" => ["required"],
             "content" => ["required", "json"],
-            "image" => ["nullable", "image"],
+            "image" => ["nullable", "image", "dimensions:min_height=300, max_height=600, max_width=600"],
         ];
     }
 }

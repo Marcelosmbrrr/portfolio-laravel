@@ -12,9 +12,8 @@ export interface Technology {
 
 export interface Project {
     id: string;
-    uuid: string;
     name: string;
-    status: string;
+    phase: string;
     description: string;
     technologies: string[];
     image: string;
@@ -22,16 +21,16 @@ export interface Project {
 
 export interface Post {
     id: string;
-    uuid: string;
     name: string;
     description: string;
     tags: string[];
     image: string;
+    is_published: boolean;
     created_at: string;
     updated_at: string;
 }
 
-export default function Welcome(props: { projects: Project[], technologies: Technology[], posts: Post[] }) {
+export default function Welcome(props: { projects: { data: Project[] }, techs: { data: Technology[] }, posts: { data: Post[] } }) {
 
     return (
         <>
@@ -106,18 +105,18 @@ export default function Welcome(props: { projects: Project[], technologies: Tech
                                     </div>
                                 </section>
                                 {/* Tech listing */}
-                                <TechList list={props.technologies} />
+                                <TechList list={props.techs.data} />
                                 {/* Project listing */}
-                                <ProjectList list={props.projects} />
+                                <ProjectList list={props.projects.data} />
                                 {/* Post listing */}
-                                <PostList list={props.posts} />
+                                <PostList list={props.posts.data} />
                             </main>
                         </main>
 
                         <footer>
                             <div className="w-full p-4 md:py-8">
                                 <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-                                <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <span className="text-red-400">Portfolio SMBR</span>.</span>
+                                <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <span className="text-red-400">Portfolio SMBR</span>.</span>
                             </div>
                         </footer>
 

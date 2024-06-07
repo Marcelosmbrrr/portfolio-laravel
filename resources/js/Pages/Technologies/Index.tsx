@@ -1,13 +1,12 @@
 import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router, Link } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { PageProps, User } from '@/types';
 import { Paginator } from '@/Components/Table/Paginator';
 import { PencilSquareIcon } from '@heroicons/react/24/solid'
 
 interface Technology {
-    id: number;
-    public_id: string;
+    id: string;
     name: string;
     description: string;
     icons: string[];
@@ -15,15 +14,14 @@ interface Technology {
     updated_at: string | null;
 }
 
-type Pagination = { data: Technology[], per_page: number, current_page: number, last_page: number, total: number }
+type Pagination = { data: Technology[], meta: { per_page: number, current_page: number, last_page: number, total: number } }
 type QueryParams = { page: number, search: string, limit: string }
 
 const defaultParams: QueryParams = { page: 1, search: "", limit: "10" }
 
-export default function Technologies({ auth, technologies, queryParams = null, success }: PageProps) {
+export default function Technologies({ auth, techs, queryParams = null, success }: { auth: { user: User }, techs: Pagination, queryParams: null | QueryParams, success: string }) {
 
-    const { data, per_page, current_page, last_page, total } = technologies as Pagination;
-
+    const { data, meta } = techs as Pagination;
     const currentParams: QueryParams = Object.assign({}, defaultParams, queryParams);
     const [search, setSearch] = React.useState<string>("");
 
@@ -52,6 +50,13 @@ export default function Technologies({ auth, technologies, queryParams = null, s
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+                    {success &&
+                        <div className="my-2 bg-teal-500 text-sm text-white rounded-lg p-4" role="alert">
+                            <span className="font-bold">Success!</span> {success as string}
+                        </div>
+                    }
+
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                         <div className="flex flex-col">
@@ -102,7 +107,7 @@ export default function Technologies({ auth, technologies, queryParams = null, s
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{tech.description}</td>
                                                             <td className="px-6 py-4 flex justify-end whitespace-nowrap text-sm font-medium">
-                                                                <Link href={route('technologies.edit', { id: tech.public_id })}>
+                                                                <Link href={route('technologies.edit', { id: tech.id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
                                                                 </Link>
                                                             </td>
@@ -118,7 +123,7 @@ export default function Technologies({ auth, technologies, queryParams = null, s
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <Paginator last_page={last_page} current_page={current_page} changePage={changePage} />
+                                        <Paginator last_page={meta.last_page} current_page={meta.current_page} changePage={changePage} />
                                     </div>
                                 </div>
                             </div>

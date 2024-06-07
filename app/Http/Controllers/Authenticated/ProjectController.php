@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Authenticated;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Project;
 use App\Http\Requests\Project\CreateProjectRequest;
 use App\Http\Requests\Project\EditProjectRequest;
+use App\Http\Resources\ProjectResource;
 
 class ProjectController extends Controller
 {
@@ -30,7 +33,7 @@ class ProjectController extends Controller
             ->paginate((int) $limit, $columns = ['*'], $pageName = 'projects', (int) $page);
 
         return Inertia::render("Projects/Index", [
-            "projects" => $data,
+            "projects" => new ProjectResource($data),
             "queryParams" => request()->query() ?: null,
             "success" => session('success')
         ]);
@@ -49,9 +52,27 @@ class ProjectController extends Controller
      */
     public function store(CreateProjectRequest $request)
     {
-        $project = $this->model->create($request->validated());
+        $project = DB::transaction(function () use ($request) {
 
-        return redirect()->route('projects.index', ['search' => $project->public_id->toString()])
+            $public_id = Str::uuid();
+            $image_path = "projects/" . $public_id . ".jpeg";
+
+            $project = $this->model->create([
+                ...$request->validated(),
+                "technologies" => json_encode($request->technologies),
+                "public_id" => $public_id,
+                "image" => $image_path
+            ]);
+
+            if ($request->hasFile('image') && !Storage::disk('public')->exists($image_path)) {
+                Storage::disk('public')->putFileAs('', $request->file('image'), $image_path);
+            }
+
+            return $project;
+        });
+
+
+        return redirect()->route('projects.index', ['search' => $project->public_id])
             ->with('success', 'Project created!');
     }
 
@@ -82,10 +103,23 @@ class ProjectController extends Controller
      */
     public function update(EditProjectRequest $request, string $id)
     {
-        $project = $this->model->where("public_id", $id)->first();
-        $project->update($request->validated());
+        $project = DB::transaction(function () use ($request, $id) {
 
-        return redirect()->route('projects.index', ['search' => $project->public_id->toString()])
+            $project = $this->model->where("public_id", $id)->first();
+
+            $project->update([
+                ...$request->validated(),
+                "technologies" => json_encode($request->technologies),
+            ]);
+
+            if ($request->hasFile('image') && !Storage::disk('public')->exists($project->path)) {
+                Storage::disk('public')->putFileAs('', $request->file('image'), $project->path);
+            }
+
+            return $project;
+        });
+
+        return redirect()->route('projects.index', ['search' => $project->public_id])
             ->with('success', 'Project updated!');
     }
 
@@ -96,6 +130,8 @@ class ProjectController extends Controller
     {
         $project = $this->model->where("public_id", $id)->first();
         $project->delete();
+
+        Storage::disk('public')->delete($project->path);
 
         return redirect()->route('projects.index')
             ->with('success', 'Project deleted!');

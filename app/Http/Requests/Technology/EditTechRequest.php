@@ -29,7 +29,7 @@ class EditTechRequest extends FormRequest
 
         return [
             "name" => ["required", $uniqueRule, "min:3", "max:255"],
-            "description" => ["required", "min:15", "max:25"],
+            "description" => ["required", "min:30", "max:80"],
             "icons" => ["required", 'array', 'min:1']
         ];
     }

@@ -22,8 +22,8 @@ class CreateTechRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => ["required", "unique", "min:3", "max:255"],
-            "description" => ["required", "min:15", "max:25"],
+            "name" => ["required", "unique:technologies,name", "min:3", "max:255"],
+            "description" => ["required", "min:30", "max:80"],
             "icons" => ["required", 'array', 'min:1']
         ];
     }

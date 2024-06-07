@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Post;
 use App\Models\Project;
 use App\Models\Technology;
+use App\Http\Resources\TechResource;
+use App\Http\Resources\ProjectResource;
+use App\Http\Resources\PostResource;
 
 class WelcomeController extends Controller
 {
@@ -21,9 +23,9 @@ class WelcomeController extends Controller
     public function index()
     {
         return Inertia::render('Welcome', [
-            'projects' => $this->loadProjects(),
-            'technologies' => $this->loadTechnologies(),
-            'posts' => $this->loadPosts()
+            'projects' => new ProjectResource($this->projectModel->all()),
+            'techs' => new TechResource($this->techModel->all()),
+            'posts' => new PostResource($this->postModel->all())
         ]);
     }
 
@@ -42,20 +44,6 @@ class WelcomeController extends Controller
                 "image" => Storage::disk('public')->url($project->image),
                 "created_at" => $project->created_at,
                 "updated_at" => $project->updated_at
-            ];
-        });
-    }
-
-    protected function loadTechnologies()
-    {
-        $technologies = $this->techModel->all();
-
-        return $technologies->map(function ($tech) {
-            return [
-                "id" => $tech->id,
-                "name" => $tech->name,
-                "description" => $tech->description,
-                "icons" => json_decode($tech->icons)
             ];
         });
     }

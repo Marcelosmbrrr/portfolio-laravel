@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import DangerButton from '@/Components/DangerButton';
 import { Head, useForm, Link } from '@inertiajs/react';
 import { User } from '@/types';
 
@@ -16,7 +17,7 @@ interface Post {
     updated_at: string | null;
 }
 
-export default function EditPost({ auth, post } : { auth: { user: User }, post: Post }) {
+export default function EditPost({ auth, post }: { auth: { user: User }, post: Post }) {
 
     const { data, setData, patch, processing, errors } = useForm({
         name: post.name,
@@ -30,6 +31,12 @@ export default function EditPost({ auth, post } : { auth: { user: User }, post: 
 
     const submit: React.FormEventHandler = (e) => {
         e.preventDefault();
+
+        patch("/posts/" + post.public_id, {
+            onError: (e) => {
+                console.log(e)
+            }
+        });
     }
 
     return (
@@ -104,11 +111,30 @@ export default function EditPost({ auth, post } : { auth: { user: User }, post: 
                                 <Link href={route('posts.index')} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
                                     Cancel
                                 </Link>
-                                <button disabled={processing} type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
+                                <button disabled={processing} type="submit" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
                                     {processing ? "Loading..." : "Confirm"}
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div className="my-5 max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="p-5 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div>
+                        <h2 className="text-lg font-medium text-gray-900">Delete Post</h2>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Once the post is deleted, all of its resources and data will be permanently deleted.
+                        </p>
+                    </div>
+                    <div className='my-3'>
+                        <div className="max-w-sm space-y-3">
+                            <input type="text" className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Type post name" />
+                        </div>
+                    </div>
+                    <div className='mt-2'>
+                        <DangerButton>Delete Post</DangerButton>
                     </div>
                 </div>
             </div>

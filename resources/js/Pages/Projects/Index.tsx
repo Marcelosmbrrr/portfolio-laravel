@@ -6,8 +6,7 @@ import { Paginator } from '@/Components/Table/Paginator';
 import { PencilSquareIcon } from '@heroicons/react/24/solid'
 
 interface Project {
-    id: number;
-    public_id: string;
+    id: string;
     name: string;
     phase: string;
     description: string;
@@ -16,15 +15,14 @@ interface Project {
     updated_at: string | null;
 }
 
-type Pagination = { data: Project[], per_page: number, current_page: number, last_page: number, total: number }
+type Pagination = { data: Project[], meta: { per_page: number, current_page: number, last_page: number, total: number } }
 type QueryParams = { page: number, search: string, limit: string }
 
 const defaultParams: QueryParams = { page: 1, search: "", limit: "10" }
 
 export default function Projects({ auth, projects, queryParams = null, success }: PageProps) {
 
-    const { data, per_page, current_page, last_page, total } = projects as Pagination;
-
+    const { data, meta } = projects as Pagination;
     const currentParams: QueryParams = Object.assign({}, defaultParams, queryParams);
     const [search, setSearch] = React.useState<string>("");
 
@@ -95,7 +93,7 @@ export default function Projects({ auth, projects, queryParams = null, success }
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.technologies}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.description}</td>
                                                             <td className="px-6 py-4 flex justify-end whitespace-nowrap text-sm font-medium">
-                                                                <Link href={route('projects.edit', { id: project.public_id })}>
+                                                                <Link href={route('projects.edit', { id: project.id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
                                                                 </Link>
                                                             </td>
@@ -111,7 +109,7 @@ export default function Projects({ auth, projects, queryParams = null, success }
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <Paginator last_page={last_page} current_page={current_page} changePage={changePage} />
+                                        <Paginator last_page={meta.last_page} current_page={meta.current_page} changePage={changePage} />
                                     </div>
                                 </div>
                             </div>

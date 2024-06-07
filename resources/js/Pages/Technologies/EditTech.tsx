@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import DangerButton from '@/Components/DangerButton';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { User } from '@/types';
 import { devIconsList } from '@/utils/DevIconList';
@@ -14,7 +15,7 @@ interface Technology {
     updated_at: string | null;
 }
 
-export default function EditTechnology({ auth, technology } : { auth: { user: User }, technology: Technology }) {
+export default function EditTechnology({ auth, technology }: { auth: { user: User }, technology: Technology }) {
 
     const { data, setData, patch, processing, errors } = useForm({
         name: technology.name,
@@ -24,6 +25,12 @@ export default function EditTechnology({ auth, technology } : { auth: { user: Us
 
     const submit: React.FormEventHandler = (e) => {
         e.preventDefault();
+
+        patch("/technologies/" + technology.id, {
+            onError: (e) => {
+                console.log(e)
+            }
+        });
     }
 
     function iconSelection(icon: string) {
@@ -55,7 +62,7 @@ export default function EditTechnology({ auth, technology } : { auth: { user: Us
         >
             <Head title="Technologies | Edit" />
 
-            <div className="py-12">
+            <div className="mt-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <form className="grid grid-cols-2 gap-3 p-5" onSubmit={submit}>
@@ -91,11 +98,30 @@ export default function EditTechnology({ auth, technology } : { auth: { user: Us
                                 <Link href={route('technologies.index')} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
                                     Cancel
                                 </Link>
-                                <button disabled={processing} type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
+                                <button disabled={processing} type="submit" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">
                                     {processing ? "Loading..." : "Confirm"}
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+
+            <div className="my-5 max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className="p-5 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div>
+                        <h2 className="text-lg font-medium text-gray-900">Delete Technology</h2>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Once the technology is deleted, all of its resources and data will be permanently deleted.
+                        </p>
+                    </div>
+                    <div className='my-3'>
+                        <div className="max-w-sm space-y-3">
+                            <input type="text" className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Type technology name" />
+                        </div>
+                    </div>
+                    <div className='mt-2'>
+                        <DangerButton>Delete Technology</DangerButton>
                     </div>
                 </div>
             </div>

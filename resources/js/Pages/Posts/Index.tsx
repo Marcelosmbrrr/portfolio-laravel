@@ -6,8 +6,7 @@ import { Paginator } from '@/Components/Table/Paginator';
 import { PencilSquareIcon } from '@heroicons/react/24/solid'
 
 interface Post {
-    id: number;
-    public_id: string;
+    id: string;
     name: string;
     is_published: boolean;
     description: string;
@@ -17,15 +16,14 @@ interface Post {
     updated_at: string | null;
 }
 
-type Pagination = { data: Post[], per_page: number, current_page: number, last_page: number, total: number }
+type Pagination = { data: Post[], meta: { per_page: number, current_page: number, last_page: number, total: number } }
 type QueryParams = { page: number, search: string, limit: string }
 
 const defaultParams: QueryParams = { page: 1, search: "", limit: "10" }
 
 export default function Posts({ auth, posts, queryParams = null, success }: PageProps) {
 
-    const { data, per_page, current_page, last_page, total } = posts as Pagination;
-
+    const { data, meta } = posts as Pagination;
     const currentParams: QueryParams = Object.assign({}, defaultParams, queryParams);
     const [search, setSearch] = React.useState<string>("");
 
@@ -98,7 +96,7 @@ export default function Posts({ auth, posts, queryParams = null, success }: Page
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.tags}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.description}</td>
                                                             <td className="px-6 py-4 flex justify-end whitespace-nowrap text-sm font-medium">
-                                                                <Link href={route('posts.edit', { id: post.public_id })}>
+                                                                <Link href={route('posts.edit', { id: post.id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
                                                                 </Link>
                                                             </td>
@@ -114,7 +112,7 @@ export default function Posts({ auth, posts, queryParams = null, success }: Page
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <Paginator last_page={last_page} current_page={current_page} changePage={changePage} />
+                                        <Paginator last_page={meta.last_page} current_page={meta.current_page} changePage={changePage} />
                                     </div>
                                 </div>
                             </div>

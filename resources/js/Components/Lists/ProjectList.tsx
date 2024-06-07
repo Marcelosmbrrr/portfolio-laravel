@@ -1,15 +1,7 @@
 import { Project } from "@/Pages/Welcome";
+import { EyeIcon } from "@heroicons/react/24/solid";
 
 export function ProjectList(props: { list: Project[] }) {
-
-    function renderTechBadges(badges: string[]) {
-        return badges.map((badge) =>
-            <div v-for="technology in project.technology" key={badge}
-                className="min-w-fit text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium px-2.5 py-0.5 rounded border border-gray-700 inline-flex items-center justify-center">
-                {badge}
-            </div>
-        )
-    }
 
     return (
         <div className="max-w-7xl px-5 md:px-0 mx-auto mt-10">
@@ -27,24 +19,28 @@ export function ProjectList(props: { list: Project[] }) {
 
             <div className="flex justify-start flex-wrap pb-3 mt-5 gap-3 cursor-pointer rounded-l-lg">
 
-                {props.list.length > 0 && props.list.map((project: Project) =>
-                    <div v-if="projects!.length > 0" v-for="project in projects" key={project.id}
-                        className="max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:shadow-[5px_5px_rgba(0,_98,_90,_0.4),_10px_10px_rgba(0,_98,_90,_0.3),_15px_15px_rgba(0,_98,_90,_0.2),_20px_20px_rgba(0,_98,_90,_0.1),_25px_25px_rgba(0,_98,_90,_0.05)] dark:bg-gray-800 dark:border-gray-700">
-                        <div className='relative h-56 w-full overflow-y-hidden'>
-                            <img className="rounded-t-lg h-full w-full" src={project.image} alt="project image" />
-                        </div>
-                        <div className="p-5">
-                            <div className="flex justify-between items-center mb-2">
-                                <h5 className="text-2xl mr-2 font-bold tracking-tight text-gray-900 dark:text-white">{project.name}
-                                </h5>
-                                <div className="bg-red-500 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded">
-                                    {project.status}</div>
-                            </div>
-                            <div className="h-20 text-gray-800 dark:text-white break-words text-justify mt-2">
+                {props.list.map((project: Project) =>
+                    <div className="max-w-sm flex flex-col bg-white border shadow-sm rounded-xl">
+                        <img className="w-full h-auto rounded-t-xl" src={project.image} alt="Image Description" />
+                        <div className="p-4 md:p-5">
+                            <h3 className="text-lg font-bold text-gray-800">
+                                {project.name}
+                            </h3>
+                            <p className="mt-1 text-gray-500">
                                 {project.description}
-                            </div>
+                            </p>
                             <div className="flex flex-wrap gap-1 mt-2">
-                                {renderTechBadges(project.technologies)}
+                                {project.technologies.map((tech) =>
+                                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
+                                        {tech}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <p className="mt-5 text-xs text-gray-500">
+                                    Phase: {project.phase}
+                                </p>
+                                <EyeIcon className="w-5 h-5 text-red-600" />
                             </div>
                         </div>
                     </div>

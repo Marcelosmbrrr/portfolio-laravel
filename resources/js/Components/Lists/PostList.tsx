@@ -1,15 +1,8 @@
+import { Link } from "@inertiajs/react"
 import { Post } from "@/Pages/Welcome"
+import { EyeIcon } from "@heroicons/react/24/solid"
 
 export function PostList(props: { list: Post[] }) {
-
-    function renderPostTags(tags: string[]) {
-        return tags.map((tag) =>
-            <div key={tag}
-                className="min-w-fit text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium px-2.5 py-0.5 rounded border border-gray-700 inline-flex items-center justify-center">
-                {tag}
-            </div>
-        )
-    }
 
     return (
         <div className="max-w-7xl px-5 md:px-0 mx-auto mt-10">
@@ -25,31 +18,30 @@ export function PostList(props: { list: Post[] }) {
             </div>
             <div className="flex justify-start flex-wrap pb-3 gap-3 mt-5 cursor-pointer rounded-l-lg">
 
-                {props.list.length > 0 && props.list.map((post: Post) =>
-                    <div key={post.uuid} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:shadow-[5px_5px_rgba(0,_98,_90,_0.4),_10px_10px_rgba(0,_98,_90,_0.3),_15px_15px_rgba(0,_98,_90,_0.2),_20px_20px_rgba(0,_98,_90,_0.1),_25px_25px_rgba(0,_98,_90,_0.05)] dark:bg-gray-800 dark:border-gray-700">
-                        <div className='relative h-56 overflow-y-hidden'>
-                            <img className="rounded-t-lg h-full w-full" src={post.image} alt="post image" />
-                        </div>
-                        <div className="p-5">
-                            <div className="flex justify-between items-center mb-2">
-                                <h5 className="text-2xl mr-2 font-bold tracking-tight text-gray-900 dark:text-white">{post.name}</h5>
-                                <div className="bg-red-500 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded">
-                                    {post.updated_at}</div>
-                            </div>
-                            <div className="h-20 dark:text-white break-words text-justify mt-2">
+                {props.list.map((post: Post) =>
+                    <div className="max-w-sm flex flex-col bg-white border shadow-sm rounded-xl">
+                        <img className="w-full h-auto rounded-t-xl" src={post.image} alt="Image Description" />
+                        <div className="p-4 md:p-5">
+                            <h3 className="text-lg font-bold text-gray-800">
+                                {post.name}
+                            </h3>
+                            <p className="mt-1 text-gray-500">
                                 {post.description}
-                            </div>
+                            </p>
                             <div className="flex flex-wrap gap-1 mt-2">
-                                {renderPostTags(post.tags)}
+                                {post.tags.map((tag) =>
+                                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
+                                        {tag}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <p className="mt-5 text-xs text-gray-500">
+                                    Published: {post.is_published}
+                                </p>
+                                <EyeIcon className="w-5 h-5 text-red-600" />
                             </div>
                         </div>
-                        <a href={`/posts/guest/${post.uuid}`} target="_blank" className="flex justify-end p-2">
-                            <svg className="w-6 h-6 text-gray-800 dark:text-white hover:text-red-600 dark:hover:text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                    d="M18 14v4.8a1.2 1.2 0 0 1-1.2 1.2H5.2A1.2 1.2 0 0 1 4 18.8V7.2A1.2 1.2 0 0 1 5.2 6h4.6m4.4-2H20v5.8m-7.9 2L20 4.2" />
-                            </svg>
-                        </a>
                     </div>
                 )}
 

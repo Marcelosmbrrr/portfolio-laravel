@@ -14,6 +14,13 @@ class CreateProjectRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'technologies' => explode(',', $this->technologies),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +33,7 @@ class CreateProjectRequest extends FormRequest
             "name" => ["required", "unique", "min:3", "max:255"],
             "description" => ["required", "min:30", "max:80"],
             "technologies" => ["required", 'array', 'min:1'],
-            "image" => ["required", "image"]
+            "image" => ["required", "image", "dimensions:min_height=300, max_height=600, max_width=600"]
         ];
     }
 }
