@@ -96,7 +96,7 @@ export default function Technologies({ auth, technologies, queryParams = null, s
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                                                 <div className="flex gap-1">
                                                                     {tech.icons.map((icon: string) =>
-                                                                        <img src={getIconCdn(icon)} className="h-8 w-8" alt={`${icon} icon`} />
+                                                                        <img src={getIconCdn(icon)} className="h-8 w-8" alt={`${icon} icon`} key={icon} />
                                                                     )}
                                                                 </div>
                                                             </td>
