@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Post;
+use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Requests\Post\EditPostRequest;
 
 class PostController extends Controller
 {
@@ -28,7 +30,9 @@ class PostController extends Controller
             ->paginate((int) $limit, $columns = ['*'], $pageName = 'posts', (int) $page);
 
         return Inertia::render("Posts/Index", [
-            "posts" => $data
+            "posts" => $data,
+            "queryParams" => request()->query() ?: null,
+            "success" => session('success')
         ]);
     }
 
@@ -43,9 +47,12 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
-        //
+        $post = $this->model->create($request->validated());
+
+        return redirect()->route('posts.index', ['search' => $post->public_id->toString()])
+            ->with('success', 'Post created!');
     }
 
     /**
@@ -53,7 +60,9 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = $this->model->where("public_id", $id)->first();
+
+        // Show Post
     }
 
     /**
@@ -61,17 +70,23 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
+        $post = $this->model->where("public_id", $id)->first();
+
         return Inertia::render("Posts/EditPost", [
-            "post" => []
+            "post" => $post
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EditPostRequest $request, string $id)
     {
-        //
+        $post = $this->model->where("public_id", $id)->first();
+        $post->update($request->validated());
+
+        return redirect()->route('posts.index', ['search' => $post->public_id->toString()])
+            ->with('success', 'Post updated!');
     }
 
     /**
@@ -79,6 +94,10 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $post = $this->model->where("public_id", $id)->first();
+        $post->delete();
+
+        return redirect()->route('post.index')
+            ->with('success', 'Post deleted!');
     }
 }

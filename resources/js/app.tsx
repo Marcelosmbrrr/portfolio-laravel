@@ -5,6 +5,23 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
+import { HSStaticMethods } from "preline";
+
+HSStaticMethods.autoInit();
+
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        HSStaticMethods.autoInit();
+    }
+});
+
+observer.observe(document.body, {
+    attributes: true,
+    subtree: true,
+    childList: true,
+    characterData: true,
+});
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({

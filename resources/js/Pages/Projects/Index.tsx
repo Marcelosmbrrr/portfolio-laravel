@@ -94,7 +94,7 @@ export default function Projects({ auth, projects, queryParams = null, success }
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.name}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.technologies}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{project.description}</td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                                            <td className="px-6 py-4 flex justify-end whitespace-nowrap text-sm font-medium">
                                                                 <Link href={route('projects.edit', { id: project.public_id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
                                                                 </Link>

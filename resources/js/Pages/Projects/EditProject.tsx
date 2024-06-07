@@ -1,15 +1,26 @@
 import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { User } from '@/types';
 
-export default function EditProject({ auth }: PageProps) {
+interface Project {
+    id: number;
+    public_id: string;
+    phase: string;
+    name: string;
+    description: string;
+    technologies: string;
+    created_at: string | null;
+    updated_at: string | null;
+}
 
-    const { data, setData, post, processing, errors } = useForm({
-        name: "",
-        phase: "",
-        description: "",
-        technologies: "",
+export default function EditProject({ auth, project } : { auth: { user: User }, project: Project }) {
+
+    const { data, setData, patch, processing, errors } = useForm({
+        name: project.name,
+        phase: project.phase,
+        description: project.description,
+        technologies: project.technologies,
         image: ""
     });
 
@@ -20,9 +31,9 @@ export default function EditProject({ auth }: PageProps) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Projects / Create</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Projects / Edit</h2>}
         >
-            <Head title="Projects | Create" />
+            <Head title="Projects | Edit" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

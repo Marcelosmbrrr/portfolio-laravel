@@ -15,7 +15,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
-                                <Link href="/">
+                                <Link href={route('dashboard')}>
                                     <img className="w-10 h-10 fill-current text-gray-500" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg" />
                                 </Link>
                             </div>

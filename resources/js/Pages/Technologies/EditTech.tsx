@@ -1,15 +1,25 @@
 import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { User } from '@/types';
 import { devIconsList } from '@/utils/DevIconList';
 
-export default function CreateTechnology({ auth }: PageProps) {
+interface Technology {
+    id: number;
+    public_id: string;
+    name: string;
+    description: string;
+    icons: string[];
+    created_at: string | null;
+    updated_at: string | null;
+}
 
-    const { data, setData, post, processing, errors } = useForm({
-        name: "",
-        description: "",
-        icons: [] as string[]
+export default function EditTechnology({ auth, technology } : { auth: { user: User }, technology: Technology }) {
+
+    const { data, setData, patch, processing, errors } = useForm({
+        name: technology.name,
+        description: technology.description,
+        icons: technology.icons as string[]
     });
 
     const submit: React.FormEventHandler = (e) => {
@@ -41,9 +51,9 @@ export default function CreateTechnology({ auth }: PageProps) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Technologies / Create</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Technologies / Edit</h2>}
         >
-            <Head title="Technologies | Create" />
+            <Head title="Technologies | Edit" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -90,7 +100,7 @@ export default function CreateTechnology({ auth }: PageProps) {
                 </div>
             </div>
 
-        </AuthenticatedLayout >
+        </AuthenticatedLayout>
     )
 
 }

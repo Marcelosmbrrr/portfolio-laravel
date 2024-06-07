@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Project;
+use App\Http\Requests\Project\CreateProjectRequest;
+use App\Http\Requests\Project\EditProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -28,7 +30,9 @@ class ProjectController extends Controller
             ->paginate((int) $limit, $columns = ['*'], $pageName = 'projects', (int) $page);
 
         return Inertia::render("Projects/Index", [
-            "projects" => $data
+            "projects" => $data,
+            "queryParams" => request()->query() ?: null,
+            "success" => session('success')
         ]);
     }
 
@@ -43,9 +47,12 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateProjectRequest $request)
     {
-        //
+        $project = $this->model->create($request->validated());
+
+        return redirect()->route('projects.index', ['search' => $project->public_id->toString()])
+            ->with('success', 'Project created!');
     }
 
     /**
@@ -53,7 +60,9 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $project = $this->model->where("public_id", $id)->first();
+
+        // Show Project
     }
 
     /**
@@ -61,17 +70,23 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
+        $project = $this->model->where("public_id", $id)->first();
+
         return Inertia::render("Projects/EditProject", [
-            "project" => []
+            "project" => $project
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EditProjectRequest $request, string $id)
     {
-        //
+        $project = $this->model->where("public_id", $id)->first();
+        $project->update($request->validated());
+
+        return redirect()->route('projects.index', ['search' => $project->public_id->toString()])
+            ->with('success', 'Project updated!');
     }
 
     /**
@@ -79,6 +94,10 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $project = $this->model->where("public_id", $id)->first();
+        $project->delete();
+
+        return redirect()->route('projects.index')
+            ->with('success', 'Project deleted!');
     }
 }

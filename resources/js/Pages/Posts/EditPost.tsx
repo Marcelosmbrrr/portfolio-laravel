@@ -1,17 +1,30 @@
 import * as React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { User } from '@/types';
 
-export default function CreatePost({ auth }: PageProps) {
+interface Post {
+    id: number;
+    public_id: string;
+    is_published: string;
+    name: string;
+    content: string;
+    description: string;
+    tags: string;
+    category: string;
+    created_at: string | null;
+    updated_at: string | null;
+}
 
-    const { data, setData, post, processing, errors } = useForm({
-        name: "",
-        category: "",
-        description: "",
-        tags: "",
-        is_published: "",
-        content: "",
+export default function EditPost({ auth, post } : { auth: { user: User }, post: Post }) {
+
+    const { data, setData, patch, processing, errors } = useForm({
+        name: post.name,
+        category: post.category,
+        description: post.description,
+        tags: post.tags,
+        is_published: post.is_published,
+        content: post.content,
         image: ""
     });
 
@@ -22,9 +35,9 @@ export default function CreatePost({ auth }: PageProps) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Posts / Create</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Posts / Edit</h2>}
         >
-            <Head title="Posts | Create" />
+            <Head title="Posts | Edit" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">

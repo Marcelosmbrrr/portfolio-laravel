@@ -10,7 +10,7 @@ interface Technology {
     public_id: string;
     name: string;
     description: string;
-    icons: string;
+    icons: string[];
     created_at: string | null;
     updated_at: string | null;
 }
@@ -95,13 +95,13 @@ export default function Technologies({ auth, technologies, queryParams = null, s
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{tech.name}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                                                                 <div className="flex gap-1">
-                                                                    {JSON.parse(tech.icons).map((icon) =>
+                                                                    {tech.icons.map((icon: string) =>
                                                                         <img src={getIconCdn(icon)} className="h-8 w-8" alt={`${icon} icon`} />
                                                                     )}
                                                                 </div>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{tech.description}</td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                                            <td className="px-6 py-4 flex justify-end whitespace-nowrap text-sm font-medium">
                                                                 <Link href={route('technologies.edit', { id: tech.public_id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
                                                                 </Link>
