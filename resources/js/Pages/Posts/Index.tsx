@@ -90,7 +90,7 @@ export default function Posts({ auth, posts, queryParams = null, success }: Page
 
                                                     {data.map((post) => (
                                                         <tr key={post.id}>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{post.is_published}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{post.is_published ? "Published" : "No Published"}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.name}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.category}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.tags}</td>

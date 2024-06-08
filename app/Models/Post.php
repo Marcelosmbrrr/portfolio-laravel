@@ -31,9 +31,13 @@ class Post extends Model
     function scopeSearch($query, $value)
     {
         return $query->when((bool) $value, function ($query) use ($value) {
+
+            if (preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $value)) {
+                $query->orWhere('public_id', $value);
+            }
+
             $query
-                ->where('public_id', $value)
-                ->orWhere('name', 'LIKE', '%' . $value . '%')
+                ->where('name', 'LIKE', '%' . $value . '%')
                 ->orWhere('category', 'LIKE', '%' . $value . '%')
                 ->orWhere('tags', 'LIKE', '%' . $value . '%')
                 ->orWhere('description', 'LIKE', '%' . $value . '%');

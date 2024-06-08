@@ -6,7 +6,6 @@ import { User } from '@/types';
 
 interface Project {
     id: number;
-    public_id: string;
     phase: string;
     name: string;
     description: string;
@@ -28,11 +27,19 @@ export default function EditProject({ auth, project }: { auth: { user: User }, p
     const submit: React.FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch("/projects/" + project.public_id, {
+        patch("/projects/" + project.id, {
             onError: (e) => {
                 console.log(e)
             }
         });
+    }
+
+    function onChangeImage(e: any) {
+        const uploaded_file = e.currentTarget.files[0];
+        if (uploaded_file && uploaded_file.type.startsWith('image/')) {
+            const imgURL = URL.createObjectURL(uploaded_file);
+            setData('image', uploaded_file);
+        }
     }
 
     return (
@@ -67,9 +74,9 @@ export default function EditProject({ auth, project }: { auth: { user: User }, p
                                     <option selected disabled>Select an option</option>
                                     <option value={"ideia"}>Idea</option>
                                     <option value={"planejamento"}>Planning</option>
-                                    <option value={"desenvolvimento"}>Planning</option>
-                                    <option value={"finalizado"}>Finished</option>
-                                    <option value={"publicado"}>Published</option>
+                                    <option value={"desenvolvimento"}>Development</option>
+                                    <option value={"produção"}>Production</option>
+                                    <option value={"finished"}>Finished</option>
                                 </select>
                                 <span className='text-red-500 text-sm'>{errors.phase}</span>
                             </div>
@@ -84,15 +91,15 @@ export default function EditProject({ auth, project }: { auth: { user: User }, p
                                 />
                                 <span className='text-red-500 text-sm'>{errors.technologies}</span>
                             </div>
-                            <div className='flex items-end'>
-                                <label htmlFor="file-input" className="sr-only">Choose file</label>
-                                <input type="file" name="file-input" id="file-input" accept='.jpeg,.jpg' className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4" />
-                                <span className='text-red-500 text-sm'>{errors.image}</span>
-                            </div>
                             <div className="col-span-2">
                                 <label htmlFor="textarea-label" className="block text-sm font-medium mb-2">Description</label>
                                 <textarea value={data.description} onChange={e => setData('description', e.target.value)} id="textarea-label" className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" rows={3} style={{ resize: 'none' }} placeholder="Type project description"></textarea>
                                 <span className='text-red-500 text-sm'>{errors.description}</span>
+                            </div>
+                            <div className='col-span-1'>
+                                <label htmlFor="file-input" className="sr-only">Choose file</label>
+                                <input onChange={onChangeImage} type="file" name="file-input" id="file-input" accept='.jpeg,.jpg' className="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4" />
+                                <span className='text-red-500 text-sm'>{errors.image}</span>
                             </div>
                             <div className='col-span-2 flex justify-end gap-x-1'>
                                 <Link href={route('projects.index')} className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-neutral-900 border-neutral-700 text-white hover:bg-neutral-800 shadow-sm disabled:opacity-50 disabled:pointer-events-none">

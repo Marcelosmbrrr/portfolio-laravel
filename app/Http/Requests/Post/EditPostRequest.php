@@ -19,6 +19,7 @@ class EditPostRequest extends FormRequest
     {
         $this->merge([
             'tags' => explode(',', $this->tags),
+            'is_published' => $this->is_published === "1"
         ]);
     }
 
@@ -35,12 +36,12 @@ class EditPostRequest extends FormRequest
             ->ignore($post_id, "public_id");
 
         return [
-            "is_published" => ["required"],
+            "is_published" => ["required", "boolean"],
             "name" => ["required", $uniqueRule, "min:3", "max:255"],
             "description" => ["required", "min:30", "max:80"],
             "tags" => ["required", 'array', 'min:1'],
             "category" => ["required"],
-            "content" => ["required", "json"],
+            "content" => ["required", "min:30"],
             "image" => ["nullable", "image", "dimensions:min_height=300, max_height=600, max_width=600"],
         ];
     }

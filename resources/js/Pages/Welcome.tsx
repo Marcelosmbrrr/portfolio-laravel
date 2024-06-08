@@ -15,7 +15,7 @@ export interface Project {
     name: string;
     phase: string;
     description: string;
-    technologies: string[];
+    technologies: string;
     image: string;
 }
 
@@ -23,9 +23,9 @@ export interface Post {
     id: string;
     name: string;
     description: string;
-    tags: string[];
+    category: string;
+    tags: string;
     image: string;
-    is_published: boolean;
     created_at: string;
     updated_at: string;
 }

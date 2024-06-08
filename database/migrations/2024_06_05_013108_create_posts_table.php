@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('description');
             $table->boolean('is_published');
             $table->json('content');
-            $table->string('tags');
+            $table->json('tags');
             $table->enum('category', ["philosophy", "technology"]);
             $table->string("image");
             $table->timestamps();

@@ -25,50 +25,26 @@ class WelcomeController extends Controller
         return Inertia::render('Welcome', [
             'projects' => new ProjectResource($this->projectModel->all()),
             'techs' => new TechResource($this->techModel->all()),
-            'posts' => new PostResource($this->postModel->all())
+            'posts' => new PostResource($this->postModel->where("is_published", true)->get())
         ]);
-    }
-
-    protected function loadProjects()
-    {
-        $projects = $this->projectModel->limit(10)->get();
-
-        return $projects->map(function ($project) {
-            return [
-                "id" => $project->id,
-                "uuid" => $project->uuid,
-                "status" => $project->status,
-                "name" => $project->name,
-                "description" => $project->description,
-                "technologies" => json_decode($project->technologies),
-                "image" => Storage::disk('public')->url($project->image),
-                "created_at" => $project->created_at,
-                "updated_at" => $project->updated_at
-            ];
-        });
-    }
-
-    protected function loadPosts()
-    {
-        $posts = $this->postModel->limit(10)->get();
-
-        return $posts->map(function ($post) {
-            return [
-                "uuid" => $post->uuid,
-                "name" => $post->name,
-                "tags" => explode(",", $post->tags),
-                "description" => $post->description,
-                "image" => Storage::disk('public')->url($post->image),
-                "created_at" => $post->created_at,
-                "updated_at" => $post->updated_at
-            ];
-        });
     }
 
     public function postView(string $id)
     {
-        $post = $this->postModel->findOrFail($id);
+        $post = $this->postModel->where("public_id", $id)->first();
 
-        return Inertia::render('Guest/PostView', $post);
+        return Inertia::render('Posts/ShowPost', [
+            "post" => [
+                "id" => $post->public_id,
+                "is_published" => $post->is_published,
+                "name" => $post->name,
+                "description" => $post->description,
+                "tags" => implode(",", json_decode($post->tags)),
+                "category" => $post->category,
+                "image" => Storage::url($post->image),
+                "created_at" => $post->created_at,
+                "updated_at" => $post->updated_at
+            ]
+        ]);
     }
 }

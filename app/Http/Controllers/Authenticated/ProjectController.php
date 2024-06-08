@@ -94,7 +94,15 @@ class ProjectController extends Controller
         $project = $this->model->where("public_id", $id)->first();
 
         return Inertia::render("Projects/EditProject", [
-            "project" => $project
+            "project" => [
+                "id" => $project->public_id,
+                "phase" => $project->phase,
+                "name" => $project->name,
+                "description" => $project->description,
+                "technologies" => implode(",", json_decode($project->technologies)),
+                "created_at" => $project->created_at,
+                "updated_at" => $project->updated_at
+            ]
         ]);
     }
 
@@ -108,11 +116,11 @@ class ProjectController extends Controller
             $project = $this->model->where("public_id", $id)->first();
 
             $project->update([
-                ...$request->validated(),
+                ...$request->except('image'),
                 "technologies" => json_encode($request->technologies),
             ]);
 
-            if ($request->hasFile('image') && !Storage::disk('public')->exists($project->path)) {
+            if ($request->hasFile('image')) {
                 Storage::disk('public')->putFileAs('', $request->file('image'), $project->path);
             }
 

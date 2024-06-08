@@ -18,6 +18,7 @@ class CreatePostRequest extends FormRequest
     {
         $this->merge([
             'tags' => explode(',', $this->tags),
+            'is_published' => $this->is_published === "1"
         ]);
     }
 
@@ -29,12 +30,12 @@ class CreatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "is_published" => ["required"],
-            "name" => ["required", "unique", "min:3", "max:255"],
+            "is_published" => ["required", "boolean"],
+            "name" => ["required", "unique:posts,name", "min:3", "max:255"],
             "description" => ["required", "min:30", "max:80"],
             "tags" => ["required", 'array', 'min:1'],
             "category" => ["required"],
-            "content" => ["required", "json"],
+            "content" => ["required", "min:30"],
             "image" => ["required", "image", "dimensions:min_height=300, max_height=600, max_width=600"]
         ];
     }

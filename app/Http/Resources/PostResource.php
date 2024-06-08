@@ -21,7 +21,8 @@ class PostResource extends ResourceCollection
                 "is_published" => $post->is_published,
                 "name" => $post->name,
                 "description" => $post->description,
-                "tags" => json_decode($post->tags),
+                "tags" => implode(",", json_decode($post->tags)),
+                "category" => $post->category,
                 "image" => Storage::url($post->image),
                 "created_at" => $post->created_at,
                 "updated_at" => $post->updated_at

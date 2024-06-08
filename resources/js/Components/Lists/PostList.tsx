@@ -19,30 +19,35 @@ export function PostList(props: { list: Post[] }) {
             <div className="flex justify-start flex-wrap pb-3 gap-3 mt-5 cursor-pointer rounded-l-lg">
 
                 {props.list.map((post: Post) =>
-                    <div className="max-w-sm flex flex-col bg-white border shadow-sm rounded-xl">
-                        <img className="w-full h-auto rounded-t-xl" src={post.image} alt="Image Description" />
-                        <div className="p-4 md:p-5">
-                            <h3 className="text-lg font-bold text-gray-800">
-                                {post.name}
-                            </h3>
-                            <p className="mt-1 text-gray-500">
-                                {post.description}
-                            </p>
-                            <div className="flex flex-wrap gap-1 mt-2">
-                                {post.tags.map((tag) =>
-                                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
-                                        {tag}
-                                    </span>
-                                )}
+                    <Link href={route('posts.show', { id: post.id })}
+                        key={post.id}
+                        className="max-w-sm bg-white hover:bg-gray-100 border border-gray-200 rounded-lg shadow"
+                    >
+                        <div className='relative h-56 w-full overflow-y-hidden'>
+                            <img className="rounded-t-lg h-full w-full" src={post.image} alt="post image" />
+                        </div>
+                        <div className="p-5">
+                            <div className="flex justify-between items-center mb-2">
+                                <h5 className="text-xl mr-2 font-bold tracking-tight text-gray-900">{post.name}</h5>
+                                <div className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm">
+                                    {post.category}
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <p className="mt-5 text-xs text-gray-500">
-                                    Published: {post.is_published}
-                                </p>
-                                <EyeIcon className="w-5 h-5 text-red-600" />
+                            <div className="h-20 text-gray-800 break-words text-justify mt-2">
+                                {post.description}
+                            </div>
+                            <div className="flex flex-wrap gap-1 mt-2">
+                                {post.tags.split(",").map((tag: string) => (
+                                    <div
+                                        key={tag}
+                                        className="min-w-fit text-white bg-neutral-800 text-sm font-medium px-2.5 py-0.5 rounded border border-gray-700 inline-flex items-center justify-center"
+                                    >
+                                        {tag}
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 )}
 
                 {props.list.length === 0 &&

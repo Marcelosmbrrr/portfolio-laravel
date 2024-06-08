@@ -60,6 +60,7 @@ class PostController extends Controller
             $post = $this->model->create([
                 ...$request->validated(),
                 "tags" => json_encode($request->tags),
+                "content" => json_encode(preg_split('/\r\n|\r|\n/', $request->content)),
                 "public_id" => $public_id,
                 "image" => $image_path
             ]);
@@ -76,16 +77,6 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $post = $this->model->where("public_id", $id)->first();
-
-        // Show Post
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
@@ -93,7 +84,16 @@ class PostController extends Controller
         $post = $this->model->where("public_id", $id)->first();
 
         return Inertia::render("Posts/EditPost", [
-            "post" => $post
+            "post" => [
+                "id" => $post->public_id,
+                "is_published" => $post->is_published,
+                "name" => $post->name,
+                "description" => $post->description,
+                "tags" => implode(",", json_decode($post->tags)),
+                "category" => $post->category,
+                "created_at" => $post->created_at,
+                "updated_at" => $post->updated_at
+            ]
         ]);
     }
 
@@ -107,11 +107,12 @@ class PostController extends Controller
             $post = $this->model->where("public_id", $id)->first();
 
             $post->update([
-                ...$request->validated(),
+                ...$request->except('image'),
+                "content" => json_encode(preg_split('/\r\n|\r|\n/', $request->content)),
                 "tags" => json_encode($request->tags)
             ]);
 
-            if ($request->hasFile('image') && !Storage::disk('public')->exists($post->path)) {
+            if ($request->hasFile('image')) {
                 Storage::disk('public')->putFileAs('', $request->file('image'), $post->path);
             }
 

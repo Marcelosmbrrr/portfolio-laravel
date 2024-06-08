@@ -21,7 +21,7 @@ class ProjectResource extends ResourceCollection
                 "phase" => $project->phase,
                 "name" => $project->name,
                 "description" => $project->description,
-                "technologies" => json_decode($project->icons),
+                "technologies" => implode(",", json_decode($project->technologies)),
                 "image" => Storage::url($project->image),
                 "created_at" => $project->created_at,
                 "updated_at" => $project->updated_at

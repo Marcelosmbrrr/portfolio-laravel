@@ -17,43 +17,44 @@ export function ProjectList(props: { list: Project[] }) {
                 <h1 className="text-2xl font-bold text-gray-800"><span className="text-red-400">Projetos</span> recentes</h1>
             </div>
 
-            <div className="flex justify-start flex-wrap pb-3 mt-5 gap-3 cursor-pointer rounded-l-lg">
+            <div className="flex justify-start flex-wrap pb-3 mt-5 gap-3 rounded-l-lg">
 
                 {props.list.map((project: Project) =>
-                    <div className="max-w-sm flex flex-col bg-white border shadow-sm rounded-xl">
-                        <img className="w-full h-auto rounded-t-xl" src={project.image} alt="Image Description" />
-                        <div className="p-4 md:p-5">
-                            <h3 className="text-lg font-bold text-gray-800">
-                                {project.name}
-                            </h3>
-                            <p className="mt-1 text-gray-500">
-                                {project.description}
-                            </p>
-                            <div className="flex flex-wrap gap-1 mt-2">
-                                {project.technologies.map((tech) =>
-                                    <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm dark:bg-neutral-900 dark:border-neutral-700 dark:text-white">
-                                        {tech}
-                                    </span>
-                                )}
+                    <div key={project.id} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                        <div className='relative h-56 w-full overflow-y-hidden'>
+                            <img className="rounded-t-lg h-full w-full" src={project.image} alt="project image" />
+                        </div>
+                        <div className="p-5">
+                            <div className="flex justify-between items-center mb-2">
+                                <h5 className="text-xl mr-2 font-bold tracking-tight text-gray-900">{project.name}</h5>
+                                <div className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-md text-xs font-medium border border-gray-200 bg-white text-gray-800 shadow-sm">
+                                    {project.phase}
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <p className="mt-5 text-xs text-gray-500">
-                                    Phase: {project.phase}
-                                </p>
-                                <EyeIcon className="w-5 h-5 text-red-600" />
+                            <div className="h-20 text-gray-800 break-words text-justify mt-2">
+                                {project.description}
+                            </div>
+                            <div className="flex flex-wrap gap-1 mt-2">
+                                {project.technologies.split(",").map((tech: string) =>
+                                    <div key={tech}
+                                        className="min-w-fit text-white bg-neutral-800 text-sm font-medium px-2.5 py-0.5 rounded border border-gray-700 inline-flex items-center justify-center">
+                                        {tech}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
                 )}
 
-                {props.list.length === 0 &&
+                {
+                    props.list.length === 0 &&
                     <div>
                         <span className="text-gray-800">Nenhum projetado encontrado.</span>
                     </div>
                 }
 
-            </div>
-        </div>
+            </div >
+        </div >
     )
 
 }

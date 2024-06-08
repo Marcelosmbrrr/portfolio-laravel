@@ -41,6 +41,12 @@ services:
         networks:
             - laravel
 
+    # redis
+    redis:
+        image: redis:latest
+        networks:
+            - laravel
+
 networks:
     laravel:
         driver: bridge
