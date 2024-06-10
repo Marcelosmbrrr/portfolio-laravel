@@ -15,8 +15,6 @@ interface Post {
 
 export default function ShowPost({ post }: { post: Post }) {
 
-
-
     return (
         <>
             <Head title="Welcome" />
@@ -31,7 +29,7 @@ export default function ShowPost({ post }: { post: Post }) {
                                         <p className="text-xl font-bold text-gray-900">Marcelo Moreira</p>
                                         <p className="text-base text-gray-500">Desenvolvedor Full Stack</p>
                                         <p className="text-base text-gray-500">
-                                            <time pubdate="pubdate" dateTime="2022-02-08" title="February 8th, 2022">{post.updated_at}</time>
+                                            <time dateTime="2022-02-08" title="February 8th, 2022">{post.updated_at}</time>
                                         </p>
                                     </div>
                                 </div>
