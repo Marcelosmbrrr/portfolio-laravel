@@ -39,11 +39,12 @@ class WelcomeController extends Controller
                 "is_published" => $post->is_published,
                 "name" => $post->name,
                 "description" => $post->description,
-                "tags" => implode(",", json_decode($post->tags)),
+                "tags" => json_decode($post->tags),
                 "category" => $post->category,
+                "content" => json_decode($post->content),
                 "image" => Storage::url($post->image),
-                "created_at" => $post->created_at,
-                "updated_at" => $post->updated_at
+                "created_at" => $post->created_at->format('d/m/Y h:i'),
+                "updated_at" => $post->updated_at->format('d/m/Y h:i')
             ]
         ]);
     }

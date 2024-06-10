@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('is_published');
             $table->json('content');
             $table->json('tags');
-            $table->enum('category', ["philosophy", "technology"]);
+            $table->enum('category', ["outros", "tecnologia"]);
             $table->string("image");
             $table->timestamps();
         });

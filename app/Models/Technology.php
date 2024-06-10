@@ -24,12 +24,9 @@ class Technology extends Model
     {
         return $query->when((bool) $value, function ($query) use ($value) {
 
-            if (preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/', $value)) {
-                $query->orWhere('public_id', $value);
-            }
-
             $query
-                ->where('name', 'LIKE', '%' . $value . '%')
+                ->where('public_id', $value)
+                ->orWhere('name', 'LIKE', '%' . $value . '%')
                 ->orWhere('description', 'LIKE', '%' . $value . '%');
         });
     }

@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router, Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { Paginator } from '@/Components/Table/Paginator';
-import { PencilSquareIcon } from '@heroicons/react/24/solid'
+import { PencilSquareIcon, EyeIcon } from '@heroicons/react/24/solid'
 
 interface Post {
     id: string;
@@ -95,9 +95,12 @@ export default function Posts({ auth, posts, queryParams = null, success }: Page
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.category}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.tags}</td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{post.description}</td>
-                                                            <td className="px-6 py-4 flex justify-end whitespace-nowrap text-sm font-medium">
+                                                            <td className="px-6 py-4 flex justify-end gap-2 whitespace-nowrap text-sm font-medium">
                                                                 <Link href={route('posts.edit', { id: post.id })}>
                                                                     <PencilSquareIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
+                                                                </Link>
+                                                                <Link href={route('posts.show', { id: post.id })}>
+                                                                    <EyeIcon className="flex-shrink-0 w-5 h-5 text-green-600 transition duration-75" />
                                                                 </Link>
                                                             </td>
                                                         </tr>

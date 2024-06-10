@@ -63,8 +63,8 @@ export default function CreatePost({ auth }: PageProps) {
                                     className="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                                 >
                                     <option selected disabled>Select an option</option>
-                                    <option value={"technology"}>Technology</option>
-                                    <option value={"philosophy"}>Philosophy</option>
+                                    <option value={"tecnologia"}>Technology</option>
+                                    <option value={"outros"}>Other</option>
                                 </select>
                                 <span className='text-red-500 text-sm'>{errors.category}</span>
                             </div>
